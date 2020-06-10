@@ -1,0 +1,46 @@
+{
+    "name": "mogody/hyperf-resource",
+    "description": "Api resource classes allow you to expressively and easily transform your models and model collections into JSON",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2",
+        "hyperf/utils": "~1.1.0",
+        "hyperf/paginator": "~1.1.0",
+        "hyperf/http-message": "~1.1.0",
+        "hyperf/http-server": "~1.1.0",
+        "hyperf/di": "~1.1.0",
+        "mogody/hyperf-responsable": "~1.0.1",
+        "psr/http-message": "^1.0",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^7.0.0",
+        "hyperf/testing": "~1.1.0",
+        "hyperf/database": "~1.1.0",
+        "phpstan/phpstan": "^0.10.5",
+        "friendsofphp/php-cs-fixer": "^2.9"
+    },
+    "authors": [
+        {
+            "name": "wenghang",
+            "email": "wenghang1228@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Mogody\\Resource\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MogodyTest\\Resource\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "co-phpunit -c phpunit.xml --colors=always",
+        "analyse": "phpstan analyse --memory-limit 300M -l 0 -c phpstan.neon ./src",
+        "cs-fix": "php-cs-fixer fix $1"
+    }
+}
