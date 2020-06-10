@@ -12,12 +12,12 @@ declare(strict_types=1);
 namespace Mogody\Resource\Json;
 
 use Countable;
-use Hyperf\HttpServer\Contract\RequestInterface as HyperfRequestInterface;
 use Hyperf\Paginator\AbstractPaginator;
 use IteratorAggregate;
 use Mogody\Resource\CollectsResources;
 use Psr\Http\Message\RequestInterface as PsrRequestInterface;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class ResourceCollection extends JsonResource implements Countable, IteratorAggregate
 {
@@ -96,7 +96,7 @@ class ResourceCollection extends JsonResource implements Countable, IteratorAggr
     /**
      * Transform the resource into a JSON array.
      */
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return $this->collection->map->toArray($request)->all();
     }

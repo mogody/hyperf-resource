@@ -18,7 +18,6 @@ use Hyperf\Di\ClosureDefinitionCollectorInterface;
 use Hyperf\Di\MethodDefinitionCollector;
 use Hyperf\Di\MethodDefinitionCollectorInterface;
 use Hyperf\HttpMessage\Server\Response as Psr7Response;
-use Hyperf\HttpServer\Contract\RequestInterface as HyperfRequestInterface;
 use Hyperf\HttpServer\Response;
 use Hyperf\HttpServer\Router\DispatcherFactory;
 use Hyperf\Paginator\LengthAwarePaginator;
@@ -37,6 +36,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface as PsrRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use ReflectionMethod;
 
 /**
@@ -798,7 +798,7 @@ class ApiResourceTest extends TestCase
         $middleware = new CoreMiddlewareStub($container = $this->getContainer(), 'http');
         $reflectionMethod = new ReflectionMethod(CoreMiddleware::class, 'transferToResponse');
         $reflectionMethod->setAccessible(true);
-        $request = Mockery::mock(HyperfRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         Context::set(ResponseInterface::class, $psr7Response = new Psr7Response());
         return $reflectionMethod->invoke($middleware, $except(), $request);
     }
@@ -830,7 +830,7 @@ class Author extends Model
 
 class AuthorResource extends JsonResource
 {
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return ['name' => $this->name];
     }
@@ -838,7 +838,7 @@ class AuthorResource extends JsonResource
 
 class PostResource extends JsonResource
 {
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return ['id' => $this->id, 'title' => $this->title, 'custom' => true];
     }
@@ -846,7 +846,7 @@ class PostResource extends JsonResource
 
 class AuthorResourceWithOptionalRelationship extends PostResource
 {
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return [
             'name' => $this->name,
@@ -874,7 +874,7 @@ class Post extends Model
 
 class ObjectResource extends JsonResource
 {
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return [
             'name' => $this->first_name,
@@ -890,7 +890,7 @@ class PostResourceWithoutWrap extends PostResource
 
 class PostResourceWithOptionalData extends JsonResource
 {
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return [
             'id' => $this->id,
@@ -909,7 +909,7 @@ class PostResourceWithOptionalData extends JsonResource
 
 class PostResourceWithOptionalMerging extends JsonResource
 {
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return [
             'id' => $this->id,
@@ -923,7 +923,7 @@ class ResourceWithPreservedKeys extends PostResource
 {
     protected $preserveKeys = true;
 
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return $this->resource;
     }
@@ -933,7 +933,7 @@ class PostCollectionResource extends ResourceCollection
 {
     public $collects = PostResource::class;
 
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return ['data' => $this->collection];
     }
@@ -975,7 +975,7 @@ class JsonSerializableResource implements JsonSerializable
 
 class SerializablePostResource extends JsonResource
 {
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return new JsonSerializableResource($this);
     }
@@ -983,7 +983,7 @@ class SerializablePostResource extends JsonResource
 
 class PostResourceWithOptionalRelationship extends PostResource
 {
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return [
             'id' => $this->id,
@@ -1002,7 +1002,7 @@ class Subscription
 
 class PostResourceWithOptionalPivotRelationship extends PostResource
 {
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         return [
             'id' => $this->id,

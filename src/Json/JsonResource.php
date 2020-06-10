@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Mogody\Resource\Json;
 
 use ArrayAccess;
-use Hyperf\HttpServer\Contract\RequestInterface as HyperfRequestInterface;
+use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\Utils\ApplicationContext;
 use Hyperf\Utils\Codec\Json;
 use Hyperf\Utils\Contracts\Arrayable;
@@ -22,6 +22,7 @@ use Mogody\Resource\DelegatesToResource;
 use Mogody\Responsable\Contract\Responsable;
 use Psr\Http\Message\RequestInterface as PsrRequestInterface;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class JsonResource implements ArrayAccess, JsonSerializable, Responsable
 {
@@ -99,7 +100,7 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable
      */
     public function resolve(PsrRequestInterface $request = null): array
     {
-        $containerRequest = ApplicationContext::getContainer()->get(HyperfRequestInterface::class);
+        $containerRequest = ApplicationContext::getContainer()->get(RequestInterface::class);
 
         $data = $this->toArray(
             $request = $request ?: $containerRequest
@@ -117,7 +118,7 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable
     /**
      * Transform the resource into an array.
      */
-    public function toArray(HyperfRequestInterface $request): array
+    public function toArray(ServerRequestInterface $request): array
     {
         if (is_null($this->resource)) {
             return [];
@@ -183,7 +184,7 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable
      */
     public function response(PsrRequestInterface $request): PsrResponseInterface
     {
-        $containerRequest = ApplicationContext::getContainer()->get(HyperfRequestInterface::class);
+        $containerRequest = ApplicationContext::getContainer()->get(RequestInterface::class);
 
         return $this->toResponse(
             $request ?: $containerRequest
