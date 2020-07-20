@@ -35,7 +35,7 @@ date_default_timezone_set('Asia/Shanghai');
 \Swoole\Runtime::enableCoroutine(true);
 
 require BASE_PATH . '/vendor/autoload.php';
-
+Hyperf\Di\ClassLoader::init();
 $container = new Container((new DefinitionSourceFactory(true))());
 
 if (! $container instanceof \Psr\Container\ContainerInterface) {
