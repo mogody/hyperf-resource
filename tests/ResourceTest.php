@@ -45,7 +45,7 @@ use ReflectionMethod;
  */
 class ApiResourceTest extends TestCase
 {
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
     }
